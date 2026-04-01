@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reliant Air Charter OpsSpecs Portal</title>
+  <style>
+    :root {
+      --bg: #0b1220;
+      --panel: #121b2e;
+      --panel-2: #1a2742;
+      --text: #eef4ff;
+      --muted: #b7c4df;
+      --accent: #7db3ff;
+      --border: rgba(255,255,255,0.12);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, Arial, sans-serif;
+      background: linear-gradient(180deg, #08101d 0%, #0f1728 100%);
+      color: var(--text);
+    }
+    .wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 32px 20px 56px;
+    }
+    .hero {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: 0 18px 50px rgba(0,0,0,0.25);
+      backdrop-filter: blur(10px);
+    }
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(28px, 4vw, 42px);
+      line-height: 1.1;
+    }
+    p {
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .grid {
+      margin-top: 24px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+    }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 18px;
+    }
+    .card h2 {
+      margin: 0 0 8px;
+      font-size: 18px;
+    }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 0 16px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 600;
+      border: 1px solid var(--border);
+      background: var(--panel-2);
+      color: var(--text);
+    }
+    .btn.primary {
+      background: var(--accent);
+      color: #06101f;
+      border-color: transparent;
+    }
+    .viewer {
+      margin-top: 24px;
+      border-radius: 24px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: #111;
+      min-height: 80vh;
+    }
+    iframe {
+      width: 100%;
+      height: 80vh;
+      border: 0;
+      background: #fff;
+    }
+    .notice {
+      margin-top: 16px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: rgba(125,179,255,0.08);
+      border: 1px solid rgba(125,179,255,0.24);
+    }
+    code {
+      background: rgba(255,255,255,0.08);
+      padding: 2px 6px;
+      border-radius: 6px;
+      color: #fff;
+      word-break: break-all;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <h1>Reliant Air Charter OpsSpecs Portal</h1>
+      <p>
+        Replace the file named <code>opspecs.pdf</code> in this site folder any time you update your OpsSpecs.
+        Your GOM can hyperlink directly to that PDF, including specific pages with <code>#page=</code>.
+      </p>
+
+      <div class="grid">
+        <div class="card">
+          <h2>Direct PDF link</h2>
+          <p>Use this URL in the GOM for hidden hyperlinks.</p>
+          <div class="actions">
+            <a class="btn primary" id="pdfLink" href="opspecs.pdf" target="_blank" rel="noopener">Open OpsSpecs PDF</a>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Page-link format</h2>
+          <p>Example format for a specific page:</p>
+          <p><code id="pageExample">opspecs.pdf#page=37</code></p>
+        </div>
+
+        <div class="card">
+          <h2>Viewer page</h2>
+          <p>This page previews the PDF below, but your GOM should link to the direct PDF URL.</p>
+          <div class="actions">
+            <a class="btn" href="#viewer">Jump to Viewer</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="notice">
+        GitHub Pages is public by default. Anyone with the URL can reach the PDF unless you move this to a private host.
+      </div>
+    </section>
+
+    <section class="viewer" id="viewer">
+      <iframe id="pdfFrame" src="opspecs.pdf"></iframe>
+    </section>
+  </div>
+
+  <script>
+    (function () {
+      const origin = window.location.origin + window.location.pathname.replace(/\/[^/]*$/, '/');
+      const directPdf = new URL('opspecs.pdf', origin).toString();
+      document.getElementById('pdfLink').href = directPdf;
+      document.getElementById('pageExample').textContent = directPdf + '#page=37';
+
+      const hash = window.location.hash || '';
+      const pageMatch = hash.match(/#page=(\d+)/i);
+      if (pageMatch) {
+        document.getElementById('pdfFrame').src = directPdf + '#page=' + pageMatch[1];
+      }
+    })();
+  </script>
+</body>
+</html>

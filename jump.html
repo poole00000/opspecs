@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Opening OpsSpecs…</title>
+  <meta http-equiv="refresh" content="0; url=opspecs.pdf" />
+  <style>
+    body { font-family: Arial, sans-serif; padding: 32px; line-height: 1.5; }
+    a { word-break: break-all; }
+  </style>
+</head>
+<body>
+  <h1>Opening OpsSpecs…</h1>
+  <p id="msg">Redirecting to the requested page.</p>
+  <p>If nothing happens, <a id="fallback" href="opspecs.pdf">open the PDF manually</a>.</p>
+  <script>
+    (function () {
+      const params = new URLSearchParams(window.location.search);
+      const page = params.get('page');
+      let target = 'opspecs.pdf';
+      if (page && /^\d+$/.test(page)) {
+        target += '#page=' + page;
+        document.getElementById('msg').textContent = 'Redirecting to OpsSpecs page ' + page + '.';
+      }
+      const fallback = document.getElementById('fallback');
+      fallback.href = target;
+      fallback.textContent = 'open ' + target + ' manually';
+      window.location.replace(target);
+    })();
+  </script>
+</body>
+</html>
